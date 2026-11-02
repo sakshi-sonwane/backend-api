@@ -1,9 +1,9 @@
-import app from "./app.js";
 import { env } from "./config/env.js";
-import { connectDB } from "./lib/db.js";
+import { dbConnect } from "./lib/db.js";
+import { app } from "./app.js";
 
-await connectDB();
+await dbConnect();
 
 app.listen(env.PORT, () => {
-  console.log(`Server running on http://localhost:${env.PORT}`);
+  console.log(`server is running on port ${env.PORT}`);
 });

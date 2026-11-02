@@ -1,23 +1,34 @@
-import crypto from "node:crypto";
 import express from "express";
-import helmet from "helmet";
 import cors from "cors";
-import { env } from "./config/env.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use((req, res, next) => {
-  req.id = crypto.randomUUID();
-  res.setHeader("X-Request-Id", req.id);
-  next();
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  }),
+);
+
+// common middleware
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.static("public"));
+app.use(cookieParser());
+
+// Global error handler — must be the LAST app.use()
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.msg || err.message || "Internal Server Error";
+  res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+    errors: err.errors || [],
+  });
 });
 
-app.use(helmet());
-app.use(cors({ origin: env.APP_ORIGIN }));
-app.use(express.json({ limit: "10kb" }));
+app.get("/api/v1/health", (_req, res) => res.json({ data: { status: "ok" } }));
 
-app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
-});
-
-export default app;
+export { app };
