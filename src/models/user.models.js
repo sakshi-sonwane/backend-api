@@ -7,7 +7,7 @@ const userSchema = new Schema(
       type: String,
       default: () => crypto.randomUUID(),
       unique: true,
-      immutable:true
+      immutable: true,
     },
     userName: {
       type: String,
