@@ -25,6 +25,10 @@ app.use(helmet());
 
 app.get("/api/v1/health", (_req, res) => res.json({ data: { status: "ok" } }));
 
+import userRouter from "./routes/user.route.js"
+
+app.use("/api/v1/users",userRouter)
+
 app.use(notFound);
 app.use(errorHandler);
 

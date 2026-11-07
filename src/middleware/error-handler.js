@@ -10,8 +10,8 @@ export function errorHandler(err, req, res, _next) {
 
   res.status(status).json({
     error: {
-      code: err.code || "internal error",
       message: status >= 500 ? "internal server error" : err.message,
+      code: err.code || "internal error",
       details: err.details,
       requestId: req.id,
     },
