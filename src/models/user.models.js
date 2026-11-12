@@ -12,9 +12,8 @@ const userSchema = new Schema(
     userName: {
       type: String,
       required: [true, "username is required"],
-      unique: true,
       trim: true,
-      lowercase: true,
+      maxlength: 100,
     },
     userEmail: {
       type: String,
@@ -23,11 +22,10 @@ const userSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    userPwd: {
+    password: {
       type: String,
       select: false,
       required: [true, "Password is required"],
-      trim:true
     },
   },
   {
