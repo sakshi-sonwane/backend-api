@@ -24,7 +24,7 @@ const refreshSchema = new Schema(
       required: true,
     },
     revokedAt: {
-      type: String,
+      type:Date,
       default: null,
     },
   },
@@ -36,4 +36,5 @@ const refreshSchema = new Schema(
   },
 );
 
+refreshSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 export const refreshSession = mongoose.model("refreshSession", refreshSchema);

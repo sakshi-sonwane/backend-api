@@ -8,7 +8,6 @@ const projMemberSchema = new Schema({
     required: true,
     immutable: true,
   },
-
   userId: {
     type: String,
     required: true,

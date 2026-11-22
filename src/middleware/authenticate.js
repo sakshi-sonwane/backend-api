@@ -3,7 +3,7 @@ import { User } from "../models/user.models.js";
 import ApiError from "../utils/api-error.js";
 
 export const authenticate = async (req, res, next) => {
-  const header = req.headers.authorization; //auth field lo or haeder me ddali
+  const header = req.headers.authorization; //auth field lo or haeder me dali
 
   if (!header || !header.startsWith("Bearer ")) {
     throw new ApiError(401, "UNAUTHENTICATED", "Authentication required");

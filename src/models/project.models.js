@@ -12,6 +12,8 @@ const projectSchema = new Schema(
     projectName: {
       type: String,
       required: true,
+      trim:true,
+      maxlength:100
     },
     projectDescription: {
       type: String,
