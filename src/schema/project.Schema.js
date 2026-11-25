@@ -8,7 +8,7 @@ export const zodProjectSchema = z
   .strict();
 
 export const projectIdParamSchema = z.object({
-  projectId: z.string().uuid("Invalid project id"),
+  projectId: z.string().uuid("Invalid project id").min(1)
 });
 
 export const listQuerySchema = z.object({

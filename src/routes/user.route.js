@@ -19,10 +19,14 @@ import {
   controllerProjectList,
   findProjectById,
   updateProjById,
+  deleteprojById,
+  addMember,
+  contollerListProjectMembers,
 } from "../controllers/auth.controller.js";
 import { authenticate } from "../middleware/authenticate.js";
 import { refresh } from "../controllers/auth.controller.js";
 import { loginLimiter, authLimiter } from "../middleware/rateLimiter.js";
+import { addMemberSchema } from "../schema/member.Schema.js";
 
 const router = Router();
 
@@ -76,6 +80,30 @@ router
     authenticate,
     validate({ params: projectIdParamSchema, body: updateProjectSchema }),
     updateProjById,
+  );
+
+router
+  .route("/delete/:projectId")
+  .delete(
+    authenticate,
+    validate({ params: projectIdParamSchema }),
+    deleteprojById,
+  );
+
+router
+  .route("/add-member/:projectId")
+  .post(
+    authenticate,
+    validate({ body: addMemberSchema, params: projectIdParamSchema }),
+    addMember,
+  );
+
+router
+  .route("/:projectId/members")
+  .get(
+    authenticate,
+    validate({ params: projectIdParamSchema, query: listQuerySchema }),
+    contollerListProjectMembers,
   );
 
 export default router;

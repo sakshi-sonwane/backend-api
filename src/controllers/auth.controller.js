@@ -9,10 +9,12 @@ import {
   projectList,
   getProjectById,
   updateProjectById,
+  deleteProjectById,
+  addMemberstoProject,
+  listProjMembers,
 } from "../modules/auth/auth.service.js";
-import ApiError from "../utils/api-error.js";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   try {
     const user = await registerUser(req.body);
     res.status(201).json({
@@ -23,7 +25,7 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
     const result = await loginUser(req.body);
     res.status(200).json({
@@ -34,7 +36,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const currentUser = async (req, res) => {
+export const currentUser = async (req, res, next) => {
   try {
     res.status(200).json({ data: req.user });
   } catch (error) {
@@ -84,7 +86,7 @@ export const createProjectController = async (req, res, next) => {
     const project = await createProject(req.user.id, req.body);
     res.status(201).json({
       data: {
-        id: project._id,
+        id: project.projectId,
         projectName: project.projectName,
         projectDescription: project.projectDescription,
         ownerId: project.ownerId,
@@ -143,10 +145,61 @@ export const updateProjById = async (req, res, next) => {
     res.status(200).json({
       data: {
         id: project._id,
-        name: project.projectName, 
+        name: project.projectName,
         description: project.projectDescription,
         ownerId: project.ownerId,
         updatedAt: project.updatedAt,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteprojById = async (req, res, next) => {
+  try {
+    await deleteProjectById(req.params.projectId, req.user.id);
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addMember = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const member = await addMemberstoProject(
+      req.user.id,
+      email,
+      req.params.projectId,
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "Member added successfully",
+      data: member,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const contollerListProjectMembers = async (req, res, next) => {
+  try {
+    const list = await listProjMembers(
+      req.params.projectId,
+      req.user.id,
+      req.validatedQuery,
+    );
+
+      const { total, members } = list;
+
+    res.status(200).json({
+      data: members,
+      meta: {
+        page: req.validatedQuery.page,
+        limit: req.validatedQuery.limit,
+        total,
       },
     });
   } catch (error) {

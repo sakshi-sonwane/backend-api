@@ -12,7 +12,7 @@ const handler = (req, res) => {
 };
 
 export const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 1 * 60 * 1000,
   max: 3,
   standardHeaders: true,
   legacyHeaders: false,
